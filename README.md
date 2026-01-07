@@ -13,19 +13,46 @@ Diffusion model(SD,Flux,Wan,...) inference in pure C/C++
 ***Note that this project is under active development. \
 API and command-line option may change frequently.***
 
-## 🔥Important News
+## Installation
+Before you install this project please make sure that you have the rocm installed. If not then please install it and check weather your gpu is supported or not.
+Run this command to check the rocm support information:
+```bash
+rocminfo
+```
 
-* **2025/10/13** 🚀 stable-diffusion.cpp now supports **Qwen-Image-Edit / Qwen-Image-Edit 2509**  
-  👉 Details: [PR #877](https://github.com/leejet/stable-diffusion.cpp/pull/877)
+If supported then you will be able to see it's gfx code something like gfx1100 (For RX 7900 Series), This will vary depending on the GPU Model.
+If the rocm is supported then you can proceed to install `ninja` build system.
+If everything is all right then you can proceed to run these commands:
+```bash
+git clone https://github.com/BillyOutlast/rocm-stable-diffusion.cpp.git
+cd rocm-stable-diffusion.cpp
 
-* **2025/10/12** 🚀 stable-diffusion.cpp now supports **Qwen-Image**  
-  👉 Details: [PR #851](https://github.com/leejet/stable-diffusion.cpp/pull/851)
+# Create build directory
+mkdir build && cd build
 
-* **2025/09/14** 🚀 stable-diffusion.cpp now supports **Wan2.1 Vace**  
-  👉 Details: [PR #819](https://github.com/leejet/stable-diffusion.cpp/pull/819)
+# Adding ggml
+git submodule update --init --recursive
 
-* **2025/09/06** 🚀 stable-diffusion.cpp now supports **Wan2.1 / Wan2.2**  
-  👉 Details: [PR #778](https://github.com/leejet/stable-diffusion.cpp/pull/778)
+# Configure CMake for ROCm (HIPBLAS)
+cmake .. \
+    -G Ninja \
+    -DCMAKE_C_COMPILER=clang \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DSD_HIPBLAS=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DAMDGPU_TARGETS=gfx1100
+
+# Build
+ninja
+
+# Move the binary and clean the project
+mv bin ../../
+cd ../../
+rm -rf rocm-stable-diffusion.cpp
+```
+
+After wards you will have the `bin/sd` binary file.
+You can use that binary according to the documentation.
 
 ## Features
 
